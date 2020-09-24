@@ -17,7 +17,7 @@ Use this app on a default browser like Google Chrome. This app is responsive and
 
 
 ## Screenshots
-/assets/Screen-shot.png
+Work-Day-Scheduler/master/assets/Screen-Shot.png
 
 ## Credits
 

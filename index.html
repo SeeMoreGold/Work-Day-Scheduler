@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -18,7 +21,7 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="assets/style.css" />
     <title>Work Day Scheduler</title>
   </head>
 
@@ -28,16 +31,159 @@
       <p class="lead">A simple calendar app for scheduling your work day</p>
       <p id="currentDay" class="lead"></p>
     </header>
-    <div class="container">
+    <div class="container" id="plannerContainer">
       <!-- Timeblocks go here -->
+
     </div>
     
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    
     <script>
+    $(document).ready(function() {
+    // This is the test flag
+      var testFlag = false;
+
+    // Using moment.js the current day is retrieved logged and displayed in #currentDay div
       var now = moment();
-      console.log(now.format("dddd MMMM DD YYYY"));
+      console.log(now.format("dddd MMMM DD, YYYY"));
       $("#currentDay").text(now.format("dddd MMMM DD, YYYY"));
+    
+    // Gets the hour from moment.js
+      var nowHour = now.format('H');
+      console.log("Current hour: " + nowHour);
+
+    // Changing the time from military time
+      if (testFlag) {
+        nowHour = 13;
+      }
+
+      // Get saved plans from localStorage
+      var savedPlans = JSON.parse(localStorage.getItem("Saved Plans"));
+
+      if (testFlag) { console.log(savedPlans); }
+
+      // This updates the plan array
+      if (savedPlans !== null) {
+        planArr = savedPlans;
+      } else {
+        planArr = new Array(9);
+      }
+
+      // set variable referencing planner div
+      var $plannerDiv = $('#plannerContainer');
+      // clear existing elements
+      $plannerDiv.empty();
+
+    //   For Loop for each hour
+      for (var hour = 9; hour <= 17; hour++) {
+        var index = hour - 9;
+    
+      // build row components
+        var $rowDiv = $('<div>');
+        $rowDiv.addClass('row');
+        $rowDiv.attr('hour-index',hour);
+  
+      // Add a div for time block and add style classes
+        var $timeDiv = $('<div>');
+        $timeDiv.addClass('col-md-2');
+        $timeDiv.addClass('hour');
+        
+  
+      // Create timeBlock element for the time
+        var $timeBlock = $('<span>');
+        $timeBlock.attr('class','timeBlock');
+    
+      // Format hours for display
+      var displayHour = 0;
+      var ampm = "";
+      if (hour > 12) { 
+        displayHour = hour - 12;
+        ampm = "pm";
+      } else {
+        displayHour = hour;
+        ampm = "am";
+      }
+    
+      // populate timeBox with time
+      $timeBlock.text(`${displayHour} ${ampm}`);
+
+      // insert into col inset into timebox
+      $rowDiv.append($timeDiv);
+      $timeDiv.append($timeBlock);
+
+      // This is for the input block
+      var $inputBlock = $('<input>');
+
+      $inputBlock.attr('id',`input-${index}`);
+      $inputBlock.attr('hour-index',index);
+      $inputBlock.attr('type','text');
+      $inputBlock.attr('class','textarea');
+
+      // access index from data array for hour 
+      $inputBlock.val( planArr[index] );
+    
+      // create column for input div
+      var $inputDiv = $('<div>');
+      $inputDiv.addClass('col-md-9');
+      $inputDiv.addClass('textarea');
+      $inputDiv.addClass('input');
+
+      $rowDiv.append($inputDiv);
+      $inputDiv.append($inputBlock);
+      
+
+      // Div for save column
+      var $saveDiv = $('<div>');
+      $saveDiv.addClass('col-md-1');
+      $saveDiv.addClass('saveDiv');
+      
+      // Button in save column
+      var $saveBtn = $('<button>');
+      $saveBtn.attr('class', "saveBtn");
+      
+      // Save button icon
+      var $saveBtnIcon = $('<i>');
+      $saveBtnIcon.attr('id',`saveid-${index}`);
+      $saveBtnIcon.attr('save-id',index);
+      $saveBtnIcon.attr('class',"fa fa-save");
+
+      // Append button to the row
+      $rowDiv.append($saveDiv);
+      $saveDiv.append($saveBtn);
+      $saveBtn.append($saveBtnIcon);
+   
+      // Function call to change the color of the row based on the hour
+      changeColor($rowDiv, hour);
+    
+      // add row to planner container
+      $plannerDiv.append($rowDiv);
+    };
+
+    // Function to change the color of the row based on the hour
+    function changeColor ($hourRow,hour) { 
+      if ( hour < nowHour) {
+        $rowDiv.addClass('past');
+      } else if ( hour > nowHour) {
+        $rowDiv.addClass('future');
+      } else {
+        $rowDiv.addClass('present');
+      };
+    };
+
+    // saves to local storage
+  $(document).on('click','i', function(event) {
+    event.preventDefault();  
+
+    var $index = $(this).attr('save-id');
+    var inputId = '#input-'+$index;
+    var $value = $(inputId).val();
+
+    planArr[$index] = $value;
+
+    localStorage.setItem("Saved Plans", JSON.stringify(planArr));
+  });  
+});
     </script>
   </body>
 </html>

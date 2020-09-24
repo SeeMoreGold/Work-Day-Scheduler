@@ -5,16 +5,19 @@ https://seemoregold.github.io/Work-Day-Scheduler/
 
 ## Getting Started
 
-View this website on a default browser like Google Chrome. This website is responsive and will adjust to the user's screen size. Use the dropdown navigation links on the collapsing nav bar on small screens to access the portfolio and contact pages.
+Use this app on a default browser like Google Chrome. This app is responsive and will adjust to the user's screen size. The current hour will be highlighted in purple, while the future time blocks will be displayed in green. The past time blocks will be gray. Click into the input field to type an event and click the save button on the right to save the plan into the user's local storage.
 
 
 ## Built With
 
 * Visual Studio Code (https://code.visualstudio.com/)
 * Bootstrap (https://getbootstrap.com/)
+* JQuery
+* Moment.js (https://momentjs.com/)
+
 
 ## Screenshots
-![Screen shot of about me page](assets/Screen-Shot.png?raw=true "Index screen shot")
+/assets/Screen-shot.png
 
 ## Credits
 
@@ -29,7 +32,3 @@ Tutorials and information on Bootstrap, HTML semantics and accessibility obtaine
 
 This project is licensed under the MIT License.
 
-
-## Acknowledgments
-
-* Background image obtained from Pixabay, a free image resource. (https://www.pixabay.com)
